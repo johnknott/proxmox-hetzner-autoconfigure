@@ -31,7 +31,7 @@ Things this project will help configure and whether they are implemented yet:
 
 Hopefully this script saves some people some time. I'll try and update it as I learn new and better ways to do things with Proxmox.
 
-![Image of Yaktocat](images/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/johnknott/proxmox-hetzner-autoconfigure/master/images/screenshot.png)
 
 <!-- GETTING STARTED -->
 

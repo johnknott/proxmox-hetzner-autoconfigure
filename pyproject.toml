@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "proxmox-hetzner-autoconfigure"
-version = "0.1.4"
+version = "0.1.5"
 description = "Helps to configure Proxmox on Hetzner. Takes over where Hetzner installimage left off"
 authors = ["John Knott <john.knott@gmail.com>"]
 readme = "README.md"
