@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "proxmox-hetzner-autoconfigure"
+version = "0.1.2"
+description = "Helps to configure Proxmox on Hetzner. Takes over where Hetzner installimage left off"
+authors = ["John Knott <john.knott@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+pythondialog = "^3.5.1"
+jinja2 = "^2.11.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+black = "^19.10b0"
+
+[tool.poetry.scripts]
+proxmox-hetzner-autoconfigure = 'proxmox_hetzner_autoconfigure.main:run'
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+
+[tool.black]
+line-length = 100

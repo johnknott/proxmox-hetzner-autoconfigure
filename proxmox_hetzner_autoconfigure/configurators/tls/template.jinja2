@@ -1,0 +1,10 @@
+if pvenode acme account list | grep default; then
+    echo "ACME account 'default' is already registered - skipping."
+else
+    # Register a new ACME account    
+    pvenode acme account register default {{ email }}
+    # Configure the ACME domain(s) - must be contactable from the Internet
+    pvenode config set --acme domains={{ domain }}
+    # Order a new certificate
+    pvenode acme cert order
+fi

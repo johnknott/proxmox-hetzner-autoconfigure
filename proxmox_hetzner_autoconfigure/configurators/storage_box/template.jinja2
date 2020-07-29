@@ -1,0 +1,20 @@
+# Make the directory we will mount the storage to
+mkdir -p /mnt/storage
+
+# Allow the user to specify with env variables
+if [ -z "${STORAGE_BOX_PASSWORD-}" ]; then
+    {%- if password %}
+    # The user chose to provide their password earlier
+    STORAGE_BOX_PASSWORD={{ password }}
+    {%- else %}
+    # Ask the user for the password as they chose not to provide it earlier
+    read -s -p "Please enter your Hetzner Storage Box password:" STORAGE_BOX_PASSWORD
+    {%- endif %}
+fi
+
+# Add the mount line to /etc/fstab only if it doesnt already exist. Mounting as uid=101001, gid=101001 means unprivileged containers will be able to write to this.
+FSTAB_LINE="{{fstab_line}}"
+grep -qxF "$FSTAB_LINE" /etc/fstab || echo "$FSTAB_LINE" >> /etc/fstab
+# Mount the storage
+mount -a
+echo

@@ -1,0 +1,66 @@
+# /etc/network/interfaces
+
+# Loopback device:
+auto lo
+iface lo inet loopback
+
+# device: enp2s0
+auto enp2s0
+iface enp2s0 inet static
+# Your main Hetzner IP
+address {{ hetzner_ip }}
+# Point to Point subnet mask
+netmask 255.255.255.255
+# Your main Hetzner Gateway
+pointopoint {{ gateway_ip }}
+# Your main Hetzner Gateway
+gateway {{ gateway_ip }}
+
+# Define our bridge to be used by our NATed subnet
+auto vmbr0
+iface vmbr0 inet static
+address {{ private_network }}
+bridge_ports none
+bridge_stp off
+bridge_fd 0
+# Set up NAT
+post-up iptables -t nat -A POSTROUTING -s '{{ private_network }}' -o enp2s0 -j MASQUERADE
+# Tear down NAT
+post-down iptables -t nat -D POSTROUTING -s '{{ private_network }}' -o enp2s0 -j MASQUERADE
+
+# Define our bridge to be used by our purchased public /29 IP range
+iface vmbr1 inet static
+  address {{ hetzner_ip }}
+  netmask 255.255.255.255
+  bridge_ports none
+  bridge_stp off
+  bridge_fd 0
+  up ip route add {{ additional_ip }}/32 dev vmbr0
+# up ip route add <second additional-IP>/32 dev vmbr0
+
+# AN EXAMPLE CLIENT CONFIG
+# /etc/network/interfaces
+#
+# auto lo
+# iface lo inet loopback
+#
+## Configure the first network interface (enp2s0, attached to vmbr0 in Proxmox) to use an IP from your private IP range
+## and set the default gateway to the host machine.
+#
+#   auto enp2s0
+#   iface enp2s0 inet static
+#	    address 10.0.1.2
+#	    netmask 255.255.255.0
+#	    gateway 10.0.1.1
+#
+##  *optionally* configure the second network interface to
+##  use an IP from your purchased subnet if this machine needs to be contactable from the Internet.
+#
+#   device: enp2s1
+#   auto enp2s1
+#   iface enp2s1 inet static
+#       address {{ additional_ip }}
+#       netmask 255.255.255.255
+#       pointopoint {{ hetzner_ip }}
+#       gateway {{ hetzner_ip }}
+    

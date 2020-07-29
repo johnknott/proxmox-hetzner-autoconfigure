@@ -1,0 +1,7 @@
+# Backup {{ filename }}
+cp {{ filename }}{,.bak} 2>/dev/null || :
+
+# Write the content of the heredoc to {{ filename }}
+cat << EOF > {{ filename }}
+{{ content }}
+EOF
