@@ -3,7 +3,7 @@ name = "proxmox-hetzner-autoconfigure"
 version = "0.1.4"
 description = "Helps to configure Proxmox on Hetzner. Takes over where Hetzner installimage left off"
 authors = ["John Knott <john.knott@gmail.com>"]
-readme = README.md
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.6"
