@@ -1,4 +1,4 @@
-if lvs -S lv_name=data; then
+if [[ $(lvs -S lv_name=data) ]]; then
     echo "Logical Volume 'data' is already created - skipping."
 else
     # Create the logical volume 'data' using 99% of the remaining free space of VG0
@@ -8,3 +8,4 @@ else
     # Add our newly created thin-pool to Proxmox
     pvesm add lvmthin thin-pool --thinpool {{ lv_name }} --vgname {{ vg_name }}
 fi
+
