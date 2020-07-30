@@ -10,7 +10,7 @@ def run():
     """Main entrypoint"""
     configurators = [network, tls, storage_box, lvm_thin_storage]
 
-    if not os.environ["LC_ALL"]:
+    if not os.environ.get("LC_ALL"):
         os.environ["LC_ALL"] = "C"
 
     locale.setlocale(locale.LC_ALL, "")
