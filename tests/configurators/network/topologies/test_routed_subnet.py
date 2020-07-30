@@ -29,11 +29,11 @@ def test_gather_input_correct():
         gateway_ip="192.168.0.254",
         private_network="10.0.0.0/24",
         private_network_first_ip="10.0.0.1",
+        private_subnet_netmask="255.255.255.0",
         public_subnet="123.123.123.0/29",
+        public_subnet_netmask="255.255.255.248",
         example_private_subnet_address="10.0.0.2",
-        example_private_subnet_netmask="255.255.255.0",
         example_public_subnet_address="123.123.123.2",
-        example_public_subnet_netmask="255.255.255.248",
     )
 
 
@@ -71,11 +71,11 @@ def test_gather_input_bad_data():
         gateway_ip="192.168.0.254",
         private_network="10.0.0.0/24",
         private_network_first_ip="10.0.0.1",
+        private_subnet_netmask="255.255.255.0",
         public_subnet="123.123.123.0/29",
+        public_subnet_netmask="255.255.255.248",
         example_private_subnet_address="10.0.0.2",
-        example_private_subnet_netmask="255.255.255.0",
         example_public_subnet_address="123.123.123.2",
-        example_public_subnet_netmask="255.255.255.248",
     )
 
 
@@ -87,11 +87,11 @@ def test_generate_script():
         gateway_ip="192.168.0.254",
         private_network="10.0.0.0/24",
         private_network_first_ip="10.0.0.1",
+        private_subnet_netmask="255.255.255.0",
         public_subnet="123.123.123.0/29",
+        public_subnet_netmask="255.255.255.248",
         example_private_subnet_address="10.0.0.2",
-        example_private_subnet_netmask="255.255.255.0",
         example_public_subnet_address="123.123.123.2",
-        example_public_subnet_netmask="255.255.255.248",
     )
 
     script = config.generate_script(data)

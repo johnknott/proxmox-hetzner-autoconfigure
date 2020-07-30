@@ -20,6 +20,7 @@ gateway {{ gateway_ip }}
 auto vmbr0
 iface vmbr0 inet static
 address {{ private_network_first_ip }}
+netmask {{ private_network_netmask  }}
 bridge_ports none
 bridge_stp off
 bridge_fd 0
@@ -49,7 +50,7 @@ bridge_fd 0
 #   auto enp2s0
 #   iface enp2s0 inet static
 #	    address {{ example_private_subnet_address }}
-#	    netmask {{ example_private_subnet_netmask }}
+#	    netmask {{ private_subnet_netmask }}
 #	    gateway {{ private_network_first_ip }}
 #
 ##  *optionally* configure the second network interface to use an IP from your purchased subnet if this machine needs
@@ -58,5 +59,5 @@ bridge_fd 0
 #   auto enp2s1
 #   iface enp2s1 inet static
 #	    address {{ example_public_subnet_address }}
-#	    netmask {{ example_public_subnet_netmask }}
+#	    netmask {{ public_subnet_netmask }}
 #

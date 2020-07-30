@@ -14,10 +14,10 @@ class Data(NamedTuple):
     private_network: str
     private_network_first_ip: str
     public_subnet: str
+    public_subnet_netmask: str
+    private_subnet_netmask: str
     example_public_subnet_address: str
-    example_public_subnet_netmask: str
     example_private_subnet_address: str
-    example_private_subnet_netmask: str
 
 
 class Config(cfg.Configurator):
@@ -74,11 +74,11 @@ class Config(cfg.Configurator):
             gateway_ip=gateway_ip,
             private_network=private_network,
             private_network_first_ip=str(list(net_priv.hosts())[0]),
+            private_subnet_netmask=str(net_priv.netmask),
             public_subnet=public_subnet,
+            public_subnet_netmask=str(net_pub.netmask),
             example_private_subnet_address=str(list(net_priv.hosts())[1]),
-            example_private_subnet_netmask=str(net_priv.netmask),
             example_public_subnet_address=str(list(net_pub.hosts())[1]),
-            example_public_subnet_netmask=str(net_pub.netmask),
         )
 
     def generate_script(self, data: Data) -> str:
