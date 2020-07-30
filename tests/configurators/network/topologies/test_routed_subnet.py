@@ -31,6 +31,7 @@ def test_gather_input_correct():
         private_network_first_ip="10.0.0.1",
         private_subnet_netmask="255.255.255.0",
         public_subnet="123.123.123.0/29",
+        public_subnet_first_ip="123.123.123.1",
         public_subnet_netmask="255.255.255.248",
         example_private_subnet_address="10.0.0.2",
         example_public_subnet_address="123.123.123.2",
@@ -73,6 +74,7 @@ def test_gather_input_bad_data():
         private_network_first_ip="10.0.0.1",
         private_subnet_netmask="255.255.255.0",
         public_subnet="123.123.123.0/29",
+        public_subnet_first_ip="123.123.123.1",
         public_subnet_netmask="255.255.255.248",
         example_private_subnet_address="10.0.0.2",
         example_public_subnet_address="123.123.123.2",
@@ -89,6 +91,7 @@ def test_generate_script():
         private_network_first_ip="10.0.0.1",
         private_subnet_netmask="255.255.255.0",
         public_subnet="123.123.123.0/29",
+        public_subnet_first_ip="123.123.123.1",
         public_subnet_netmask="255.255.255.248",
         example_private_subnet_address="10.0.0.2",
         example_public_subnet_address="123.123.123.2",
@@ -100,7 +103,7 @@ def test_generate_script():
     assert "pointopoint 192.168.0.254" in script
     assert "gateway 192.168.0.254" in script
     assert "address 10.0.0.1" in script
-    assert "address 123.123.123.0/29" in script
+    assert "address 123.123.123.1" in script
     assert (
         "post-up iptables -t nat -A POSTROUTING -s '10.0.0.0/24' -o enp2s0 -j MASQUERADE" in script
     )

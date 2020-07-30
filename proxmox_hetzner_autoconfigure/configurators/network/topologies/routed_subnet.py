@@ -14,6 +14,7 @@ class Data(NamedTuple):
     private_network: str
     private_network_first_ip: str
     public_subnet: str
+    public_subnet_first_ip: str
     public_subnet_netmask: str
     private_subnet_netmask: str
     example_public_subnet_address: str
@@ -76,6 +77,7 @@ class Config(cfg.Configurator):
             private_network_first_ip=str(list(net_priv.hosts())[0]),
             private_subnet_netmask=str(net_priv.netmask),
             public_subnet=public_subnet,
+            public_subnet_first_ip=str(list(net_pub.hosts())[0]),
             public_subnet_netmask=str(net_pub.netmask),
             example_private_subnet_address=str(list(net_priv.hosts())[1]),
             example_public_subnet_address=str(list(net_pub.hosts())[1]),

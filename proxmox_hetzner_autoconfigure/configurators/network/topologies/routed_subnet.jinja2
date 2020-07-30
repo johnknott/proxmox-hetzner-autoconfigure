@@ -33,7 +33,8 @@ post-down iptables -t nat -D POSTROUTING -s '{{ private_network }}' -o enp2s0 -j
 auto vmbr1
 iface vmbr1 inet static
 # Our /29 subnet
-address {{ public_subnet }}
+address {{ public_subnet_first_ip }}
+netmask {{ public_subnet_netmask }}
 bridge_ports none
 bridge_stp off
 bridge_fd 0
