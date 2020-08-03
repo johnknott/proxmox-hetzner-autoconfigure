@@ -13,13 +13,14 @@ EOF
 # Apply the above settings now
 sysctl -p /etc/sysctl.d/99-proxmox-hetzner.conf
 
+chattr -i /etc/network/interfaces
 {{ heredoc }}
-
-# Since we are going to manually configure our _/etc/network/interfaces_ file, we don't want Proxmox to overwrite it.
-# If we create _/etc/network/.pve-ignore.interfaces_ then Proxmox will leave the network configuration files alone.
-touch /etc/network/.pve-ignore.interfaces
-# Sometimes even with the above it gets overwritten, so:
 chattr +i /etc/network/interfaces
+# Since we are going to manually configure our _/etc/network/interfaces_ file, we don't want Proxmox to overwrite it.
+# If we create _/etc/network/.pve-ignore.interfaces_ then Proxmox will usually leave the network configuration files alone.
+# Sometime it doesnt seem to though se we will also leave the above chattr lines in.
+touch /etc/network/.pve-ignore.interfaces
+
 
 # Reload your networking without needing to restart.
 # But it's definitely worthwhile restarting the server anyway and making sure everything starts as expected,

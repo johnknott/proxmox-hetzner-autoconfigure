@@ -2,7 +2,7 @@ echo 'deb http://ftp.debian.org/debian buster-backports main contrib' >> /etc/ap
 apt update
 apt install -y pve-headers wireguard-dkms qrencode
 
-mkdir ~/.wireguard
+mkdir -p ~/.wireguard
 cd ~/.wireguard
 umask 077
 wg genkey | tee privatekey | wg pubkey > publickey 
@@ -13,14 +13,13 @@ cat << EOF > /etc/wireguard/wg0.conf
 [Interface]
 PrivateKey = $(cat ~/.wireguard/privatekey)
 Address = {{ vpn_first_ip }}/{{vpn_cidr_netmask}}
-Netmask = 
 PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o $interface -j MASQUERADE
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o $interface -j MASQUERADE
 ListenPort = 51820
 
-[Peer]
-PublicKey = <Your clients wireguard publickey>
-AllowedIPs = {{ vpn_second_ip }}/32
+# [Peer]
+# PublicKey = <Your clients wireguard publickey>
+# AllowedIPs = {{ vpn_second_ip }}/32
 
 
 # ON THE CLIENT, USE A CONFIG LIKE THIS
