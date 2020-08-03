@@ -1,0 +1,7 @@
+{% for snippet in snippets %}
+# BEGIN SNIPPET: {{snippet.short_description}}
+echo "${BLUE}Configuring Snippets: {{snippet.filename}} ({{loop.index}} / {{ loop.length}})${NC}"
+{{snippet.content}}
+# END SNIPPET: {{snippet.short_description}}
+
+{% endfor %}

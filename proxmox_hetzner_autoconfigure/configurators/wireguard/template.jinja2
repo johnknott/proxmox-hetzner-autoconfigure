@@ -1,0 +1,41 @@
+echo 'deb http://ftp.debian.org/debian buster-backports main contrib' >> /etc/apt/sources.list.d/buster-backports.list
+apt update
+apt install -y pve-headers wireguard-dkms qrencode
+
+mkdir ~/.wireguard
+cd ~/.wireguard
+umask 077
+wg genkey | tee privatekey | wg pubkey > publickey 
+
+interface=$(route | grep '^default' | grep -o '[^ ]*$')
+
+cat << EOF > /etc/wireguard/wg0.conf
+[Interface]
+PrivateKey = $(cat ~/.wireguard/privatekey)
+Address = {{ vpn_first_ip }}/{{vpn_cidr_netmask}}
+Netmask = 
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o $interface -j MASQUERADE
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o $interface -j MASQUERADE
+ListenPort = 51820
+
+[Peer]
+PublicKey = <Your clients wireguard publickey>
+AllowedIPs = {{ vpn_second_ip }}/32
+
+
+# ON THE CLIENT, USE A CONFIG LIKE THIS
+# [Interface]
+# Address = {{vpn_second_ip}}/32
+# PrivateKey = <Your clients wireguard privatekey>
+# DNS = {{vpn_first_ip}}
+
+# [Peer]
+# PublicKey = $(cat ~/.wireguard/publickey) # Public Key of Server
+# Endpoint = <your servers main public facing IP>:51820
+# AllowedIPs = 0.0.0.0/0, ::/0 # Either tunnel all traffic over VPN OR
+# AllowedIPs = 10.0.0.0/8 # Tunnel some traffic over VPN
+EOF
+
+# Bring the wireguard interface up
+wg-quick up wg0
+

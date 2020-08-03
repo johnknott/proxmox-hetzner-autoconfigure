@@ -1,23 +1,23 @@
 # Since we are going to manually configure our _/etc/network/interfaces_ file, we don't want Proxmox to overwrite it.
 # If we create _/etc/network/.pve-ignore.interfaces_ then Proxmox will leave the network configuration files alone.
 touch /etc/network/.pve-ignore.interfaces
+# Sometimes even with the above it gets overwritten, so:
+chattr +i /etc/network/interfaces
 
 # We should install 'ifupdown2' so that we can restart our network easily without rebooting the server.
 # Once it's installed, you can run `ifreload -a` to reload and apply '/etc/network/interfaces' changes.
 # This comes in really handy when initially setting up networking.
 apt install ifupdown2 -y
 
-# Enable IP forwarding so this host can act as a gateway and disable ICMP redirects
-sysctl -w net.ipv4.ip_forward=1
-sysctl -w net.ipv6.conf.all.forwarding=1
-sysctl -w net.ipv4.conf.all.send_redirects=0
-
-# Also make the above settings persistent
+# Setup IP forwarding
 cat << EOF > /etc/sysctl.d/99-proxmox-hetzner.conf
 net.ipv4.ip_forward=1
 net.ipv6.conf.all.forwarding=1
 net.ipv4.conf.all.send_redirects=0
 EOF
+
+# Apply the above settings now
+sysctl -p /etc/sysctl.d/99-proxmox-hetzner.conf
 
 {{ heredoc }}
 

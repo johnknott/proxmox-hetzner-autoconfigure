@@ -1,14 +1,21 @@
 """Main entrypoint"""
+import ipdb
 import locale
 import sys
 import os
-from proxmox_hetzner_autoconfigure.configurators import network, tls, storage_box, lvm_thin_storage
+from proxmox_hetzner_autoconfigure.configurators import (
+    network,
+    tls,
+    storage_box,
+    wireguard,
+    snippets,
+)
 from proxmox_hetzner_autoconfigure.util import util
 
 
 def run():
     """Main entrypoint"""
-    configurators = [network, tls, storage_box, lvm_thin_storage]
+    configurators = [network, tls, storage_box, wireguard, snippets]
 
     if not os.environ.get("LC_ALL"):
         os.environ["LC_ALL"] = "C"

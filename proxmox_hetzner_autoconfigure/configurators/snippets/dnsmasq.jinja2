@@ -1,0 +1,14 @@
+# Install DNSMasq
+apt install -y dnsmasq
+# Add Google DNS as upstream DNS provider
+cat << EOF > /etc/dnsmasq.d/proxmox-hetzner.conf
+no-resolv
+server=8.8.8.8
+server=8.8.4.4
+EOF
+# Make this local machine use DNSMasq to resolve DNS
+cat << EOF > /etc/resolv.conf
+nameserver 127.0.0.1
+EOF
+# Restart DNSMasq and reload the config
+systemctl restart dnsmasq

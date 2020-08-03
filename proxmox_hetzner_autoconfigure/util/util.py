@@ -2,6 +2,7 @@
 import os
 import re
 import platform
+from pathlib import Path
 from ipaddress import IPv4Network, IPv4Address
 from dialog import Dialog
 from jinja2 import Environment, FileSystemLoader
@@ -20,6 +21,7 @@ ANSI_WHITE = r"\Zb\Z2"
 ANSI_RESET = r"\Zn"
 
 dialog = Dialog(dialog="dialog", autowidgetsize=True)
+all_binds = {}
 
 
 def is_proxmox_machine():
@@ -37,14 +39,17 @@ def gateway_ip():
     return os.popen("ip route | grep default | awk '{print $3}'").read().strip()
 
 
-def render_template(file, template, binds):
+def render_template(file, template_name, binds):
     """Renders a jinja2 template and returns it as a string"""
     dir_path = os.path.dirname(os.path.realpath(file))
     env = Environment(loader=FileSystemLoader(dir_path))
-    template = env.get_template(f"{template}.jinja2")
+    template = env.get_template(f"{template_name}.jinja2")
 
     if hasattr(binds, "_asdict"):
         binds = binds._asdict()
+
+    # Store the dbinds in a global so that we can access the data from elsewhere
+    all_binds[template_name] = binds
 
     return template.render(binds)
 
