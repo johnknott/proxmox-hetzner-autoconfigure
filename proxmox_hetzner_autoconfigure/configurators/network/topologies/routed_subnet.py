@@ -11,8 +11,8 @@ class Data(NamedTuple):
 
     hetzner_ip: str
     gateway_ip: str
-    private_network: str
-    private_network_first_ip: str
+    private_subnet: str
+    private_subnet_first_ip: str
     public_subnet: str
     public_subnet_first_ip: str
     public_subnet_netmask: str
@@ -32,7 +32,7 @@ class Config(cfg.Configurator):
     def gather_input(self) -> Data:
         """Gathers input from the user and returns a NetworkData"""
 
-        hetzner_ip = gateway_ip = private_network = public_subnet = ""
+        hetzner_ip = gateway_ip = private_subnet = public_subnet = ""
 
         if util.is_proxmox_machine():
             hetzner_ip = util.main_ip()
@@ -52,11 +52,11 @@ class Config(cfg.Configurator):
         if gateway_ip is None:
             return None
 
-        private_network = util.input_network(
+        private_subnet = util.input_network(
             "Please enter desired private network in CIDR notation", init="10.0.1.0/24",
         )
 
-        if private_network is None:
+        if private_subnet is None:
             return None
 
         public_subnet = util.input_network(
@@ -67,14 +67,14 @@ class Config(cfg.Configurator):
         if public_subnet is None:
             return None
 
-        net_priv = IPv4Network(private_network)
+        net_priv = IPv4Network(private_subnet)
         net_pub = IPv4Network(public_subnet)
 
         return Data(
             hetzner_ip=hetzner_ip,
             gateway_ip=gateway_ip,
-            private_network=private_network,
-            private_network_first_ip=str(list(net_priv.hosts())[0]),
+            private_subnet=private_subnet,
+            private_subnet_first_ip=str(list(net_priv.hosts())[0]),
             private_subnet_netmask=str(net_priv.netmask),
             public_subnet=public_subnet,
             public_subnet_first_ip=str(list(net_pub.hosts())[0]),

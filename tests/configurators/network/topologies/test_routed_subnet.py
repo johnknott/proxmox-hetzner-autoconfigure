@@ -27,8 +27,8 @@ def test_gather_input_correct():
     assert network_config.gather_input() == routed_subnet.Data(
         hetzner_ip="192.168.0.1",
         gateway_ip="192.168.0.254",
-        private_network="10.0.0.0/24",
-        private_network_first_ip="10.0.0.1",
+        private_subnet="10.0.0.0/24",
+        private_subnet_first_ip="10.0.0.1",
         private_subnet_netmask="255.255.255.0",
         public_subnet="123.123.123.0/29",
         public_subnet_first_ip="123.123.123.1",
@@ -70,8 +70,8 @@ def test_gather_input_bad_data():
     assert network_config.gather_input() == routed_subnet.Data(
         hetzner_ip="192.168.0.7",
         gateway_ip="192.168.0.254",
-        private_network="10.0.0.0/24",
-        private_network_first_ip="10.0.0.1",
+        private_subnet="10.0.0.0/24",
+        private_subnet_first_ip="10.0.0.1",
         private_subnet_netmask="255.255.255.0",
         public_subnet="123.123.123.0/29",
         public_subnet_first_ip="123.123.123.1",
@@ -87,8 +87,8 @@ def test_generate_script():
     data = routed_subnet.Data(
         hetzner_ip="192.168.0.1",
         gateway_ip="192.168.0.254",
-        private_network="10.0.0.0/24",
-        private_network_first_ip="10.0.0.1",
+        private_subnet="10.0.0.0/24",
+        private_subnet_first_ip="10.0.0.1",
         private_subnet_netmask="255.255.255.0",
         public_subnet="123.123.123.0/29",
         public_subnet_first_ip="123.123.123.1",

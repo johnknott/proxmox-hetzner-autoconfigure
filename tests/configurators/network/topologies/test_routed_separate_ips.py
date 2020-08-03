@@ -27,7 +27,7 @@ def test_gather_input_correct():
     assert network_config.gather_input() == routed_separate_ips.Data(
         hetzner_ip="192.168.0.1",
         gateway_ip="192.168.0.254",
-        private_network="10.0.0.0/24",
+        private_subnet="10.0.0.0/24",
         additional_ip="123.123.123.123",
     )
 
@@ -64,7 +64,7 @@ def test_gather_input_bad_data():
     assert network_config.gather_input() == routed_separate_ips.Data(
         hetzner_ip="192.168.0.7",
         gateway_ip="192.168.0.254",
-        private_network="10.0.0.0/24",
+        private_subnet="10.0.0.0/24",
         additional_ip="123.123.123.123",
     )
 
@@ -75,7 +75,7 @@ def test_generate_script():
     data = routed_separate_ips.Data(
         hetzner_ip="192.168.0.1",
         gateway_ip="192.168.0.254",
-        private_network="10.0.0.0/24",
+        private_subnet="10.0.0.0/24",
         additional_ip="123.123.123.123",
     )
 

@@ -19,14 +19,14 @@ gateway {{ gateway_ip }}
 # Define our bridge to be used by our NATed subnet
 auto vmbr0
 iface vmbr0 inet static
-address {{ private_network }}
+address {{ private_subnet }}
 bridge_ports none
 bridge_stp off
 bridge_fd 0
 # Set up NAT
-post-up iptables -t nat -A POSTROUTING -s '{{ private_network }}' -o enp2s0 -j MASQUERADE
+post-up iptables -t nat -A POSTROUTING -s '{{ private_subnet }}' -o enp2s0 -j MASQUERADE
 # Tear down NAT
-post-down iptables -t nat -D POSTROUTING -s '{{ private_network }}' -o enp2s0 -j MASQUERADE
+post-down iptables -t nat -D POSTROUTING -s '{{ private_subnet }}' -o enp2s0 -j MASQUERADE
 
 # Define our bridge to be used by our purchased public /29 IP range
 iface vmbr1 inet static

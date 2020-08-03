@@ -10,7 +10,7 @@ class Data(NamedTuple):
 
     hetzner_ip: str
     gateway_ip: str
-    private_network: str
+    private_subnet: str
     additional_ip: str
 
 
@@ -27,7 +27,7 @@ class Config(cfg.Configurator):
     def gather_input(self) -> Data:
         """Gathers input from the user and returns a NetworkData"""
 
-        hetzner_ip = gateway_ip = private_network = additional_ip = ""
+        hetzner_ip = gateway_ip = private_subnet = additional_ip = ""
 
         if util.is_proxmox_machine():
             hetzner_ip = util.main_ip()
@@ -47,11 +47,11 @@ class Config(cfg.Configurator):
         if gateway_ip is None:
             return None
 
-        private_network = util.input_network(
+        private_subnet = util.input_network(
             "Please enter desired private network in CIDR notation", init="10.0.1.0/24",
         )
 
-        if private_network is None:
+        if private_subnet is None:
             return None
 
         additional_ip = util.input_ip(
@@ -64,7 +64,7 @@ class Config(cfg.Configurator):
         return Data(
             hetzner_ip=hetzner_ip,
             gateway_ip=gateway_ip,
-            private_network=private_network,
+            private_subnet=private_subnet,
             additional_ip=additional_ip,
         )
 
