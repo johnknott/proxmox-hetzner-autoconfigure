@@ -21,7 +21,7 @@ ANSI_WHITE = r"\Zb\Z2"
 ANSI_RESET = r"\Zn"
 
 dialog = Dialog(dialog="dialog", autowidgetsize=True)
-all_binds = {}
+shared_globals = {}
 
 
 def is_proxmox_machine():
@@ -47,9 +47,6 @@ def render_template(file, template_name, binds):
 
     if hasattr(binds, "_asdict"):
         binds = binds._asdict()
-
-    # Store the dbinds in a global so that we can access the data from elsewhere
-    all_binds[template_name] = binds
 
     return template.render(binds)
 

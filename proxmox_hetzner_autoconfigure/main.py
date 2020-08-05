@@ -7,15 +7,15 @@ from proxmox_hetzner_autoconfigure.configurators import (
     network,
     tls,
     storage_box,
-    wireguard,
     snippets,
+    wireguard,
 )
 from proxmox_hetzner_autoconfigure.util import util
 
 
 def run():
     """Main entrypoint"""
-    configurators = [network, tls, storage_box, wireguard, snippets]
+    configurators = [network, tls, storage_box, snippets, wireguard]
 
     if not os.environ.get("LC_ALL"):
         os.environ["LC_ALL"] = "C"

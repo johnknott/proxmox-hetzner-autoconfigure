@@ -9,10 +9,9 @@ from proxmox_hetzner_autoconfigure.configurators import configurator as cfg
 class Data(NamedTuple):
     """Data structure that gets emitted from gather_input and passed into transform_to_commands"""
 
-    vpn_network: str
+    vpn_address_base: str
     vpn_cidr_netmask: str
-    vpn_first_ip: str
-    vpn_second_ip: str
+    dns_server: str
 
 
 class Config(cfg.Configurator):
@@ -34,15 +33,15 @@ class Config(cfg.Configurator):
             return None
 
         net_vpn = IPv4Network(vpn_network)
-        vpn_first_ip = str(list(net_vpn.hosts())[0])
-        vpn_second_ip = str(list(net_vpn.hosts())[1])
-        vpn_cidr_netmask = net_vpn.prefixlen
+        first_host = str(list(net_vpn.hosts())[0])
+        ip, vpn_cidr_netmask = vpn_network.split("/")
+        vpn_address_base = ip[: ip.rfind(".") + 1]
+        dns_server = first_host if util.shared_globals.get("DNSMasq") else "8.8.8.8"
 
         return Data(
-            vpn_network=vpn_network,
+            vpn_address_base=vpn_address_base,
             vpn_cidr_netmask=vpn_cidr_netmask,
-            vpn_first_ip=vpn_first_ip,
-            vpn_second_ip=vpn_second_ip,
+            dns_server=dns_server,
         )
 
     def generate_script(self, data: Data) -> str:

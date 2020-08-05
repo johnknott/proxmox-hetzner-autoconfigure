@@ -47,6 +47,7 @@ class Config(cfg.Configurator):
 
         def load_snippet(snippet):
             snippet["content"] = util.render_template(__file__, snippet["filename"], [])
+            util.shared_globals[snippet["short_description"]] = True
             return snippet
 
         chosen_snippets = [load_snippet(s) for s in snippets if s["short_description"] in chosen]
