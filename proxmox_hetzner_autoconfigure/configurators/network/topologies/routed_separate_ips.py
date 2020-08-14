@@ -61,6 +61,9 @@ class Config(cfg.Configurator):
         if additional_ip is None:
             return None
 
+        util.shared_globals["private_subnet"] = private_subnet
+        util.shared_globals["hetzner_ip"] = hetzner_ip
+
         return Data(
             hetzner_ip=hetzner_ip,
             gateway_ip=gateway_ip,

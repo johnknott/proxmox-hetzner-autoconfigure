@@ -1,5 +1,4 @@
 """Main entrypoint"""
-import ipdb
 import locale
 import sys
 import os
@@ -23,8 +22,8 @@ def run():
     locale.setlocale(locale.LC_ALL, "")
 
     util.dialog.msgbox(
-        "This script will help configure your Network, TLS keys, and Storage "
-        "on your Hetzner based Proxmox Host Node.\n\n"
+        "This script will help configure your Network, Wireguard VPN, Security, "
+        "TLS keys, DNS and Storage on your Hetzner based Proxmox Host Node.\n\n"
         "It will not make any changes to your system.\n\n"
         "It outputs a single script file with no dependencies you can "
         "inspect and then run manually. "

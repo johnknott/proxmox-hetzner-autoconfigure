@@ -1,0 +1,30 @@
+systemctl --now disable rpcbind rpcbind.socket
+
+cat << EOF > /etc/pve/cluster.fw
+[OPTIONS]
+
+enable: 1
+
+[RULES]
+{% if shared_globals['wireguard'] %}
+OUT ACCEPT -log nolog
+IN ACCEPT -i enp2s0 -p udp -dport shared_globals['wireguard_port'] -log nolog # VPN traffic (the only public open port)
+{% if shared_globals['dnsmasq'] %}
+IN DNS(ACCEPT) -source { shared_globals['private_subnet'] } -log nolog
+IN DNS(ACCEPT) -source { shared_globals['wireguard_subnet'] } -log nolog
+{% endif %}
+IN ACCEPT -i wghub -p tcp -dport 8006 -log nolog # Accept Proxmox web interface over VPN
+IN SSH(ACCEPT) -i wghub -log nolog # Accept SSH over VPN
+IN REJECT -log nolog # Reject all other incoming
+{% else %}
+OUT ACCEPT -log nolog
+{% if shared_globals['dnsmasq'] %}
+IN DNS(ACCEPT) -source { shared_globals['private_subnet'] } -log nolog
+{% endif %}
+IN ACCEPT -p tcp -dport 8006 -log nolog # Accept Proxmox web interface
+IN SSH(ACCEPT) -log nolog # Accept SSH
+IN REJECT -log nolog # Reject all other incoming
+{% endif %}
+EOF
+
+pve-firewall restart

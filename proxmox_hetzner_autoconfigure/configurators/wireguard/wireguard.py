@@ -1,5 +1,6 @@
 """Network Configurator"""
 
+import random
 from typing import NamedTuple
 from ipaddress import IPv4Network
 from proxmox_hetzner_autoconfigure.util import util
@@ -9,9 +10,10 @@ from proxmox_hetzner_autoconfigure.configurators import configurator as cfg
 class Data(NamedTuple):
     """Data structure that gets emitted from gather_input and passed into transform_to_commands"""
 
-    vpn_address_base: str
-    vpn_cidr_netmask: str
+    wireguard_address_base: str
+    wireguard_cidr_netmask: str
     dns_server: str
+    port: int
 
 
 class Config(cfg.Configurator):
@@ -25,23 +27,29 @@ class Config(cfg.Configurator):
     def gather_input(self) -> Data:
         """Gathers input from the user and returns a NetworkData"""
 
-        vpn_network = util.input_network(
+        wireguard_subnet = util.input_network(
             "Please enter desired VPN details in CIDR notation", init="10.0.10.0/24",
         )
 
-        if vpn_network is None:
+        if wireguard_subnet is None:
             return None
 
-        net_vpn = IPv4Network(vpn_network)
-        first_host = str(list(net_vpn.hosts())[0])
-        ip, vpn_cidr_netmask = vpn_network.split("/")
-        vpn_address_base = ip[: ip.rfind(".") + 1]
+        net_wireguard = IPv4Network(wireguard_subnet)
+        first_host = str(list(net_wireguard.hosts())[0])
+        ip, wireguard_cidr_netmask = wireguard_subnet.split("/")
+        wireguard_address_base = ip[: ip.rfind(".") + 1]
         dns_server = first_host if util.shared_globals.get("DNSMasq") else "8.8.8.8"
 
+        port = random.randint(50000, 60000)
+        util.shared_globals["wireguard_port"] = port
+        util.shared_globals["wireguard"] = True
+        util.shared_globals["wireguard_subnet"] = wireguard_subnet
+
         return Data(
-            vpn_address_base=vpn_address_base,
-            vpn_cidr_netmask=vpn_cidr_netmask,
+            wireguard_address_base=wireguard_address_base,
+            wireguard_cidr_netmask=wireguard_cidr_netmask,
             dns_server=dns_server,
+            port=port,
         )
 
     def generate_script(self, data: Data) -> str:

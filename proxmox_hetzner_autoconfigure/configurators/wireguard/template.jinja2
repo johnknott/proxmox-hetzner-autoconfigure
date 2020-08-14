@@ -1,4 +1,3 @@
-echo  >> 
 SOURCE_LINE='deb http://ftp.debian.org/debian buster-backports main contrib'
 SOURCE_LOCATION=/etc/apt/sources.list.d/buster-backports.list
 grep -qxF "$SOURCE_LINE" $SOURCE_LOCATION || echo "$SOURCE_LINE" >> $SOURCE_LOCATION
@@ -11,17 +10,21 @@ rm -f easy-wg-quick
 wget https://raw.githubusercontent.com/burghardt/easy-wg-quick/master/easy-wg-quick
 chmod +x easy-wg-quick
 
-echo {{ vpn_address_base }} > intnetaddress.txt
-echo /{{ vpn_cidr_netmask }} > intnetmask.txt
+echo {{ wireguard_address_base }} > intnetaddress.txt
+echo {{ wireguard_cidr_netmask }} > intnetmask.txt
 echo {{ dns_server }} > intnetdns.txt
+echo {{ port }} > portno.txt
+
 if [ ! -f seqno.txt ]; then
     echo 2 > seqno.txt
     # Create the hub conf and the first client
-    ./easy-wq-quick first-client
+    ./easy-wg-quick first_ client
 fi
 
 rm -f /etc/wireguard/wghub.conf
 ln -s wghub.conf /etc/wireguard/wghub.conf
 
-# Bring the wireguard interface up
-sudo wg-quick up ./wghub.conf
+systemctl enable wg-quick@wghub.service
+systemctl daemon-reload
+systemctl start wg-quick@wghub.service
+# Enable the systemd unit and bring the wireguard interface up

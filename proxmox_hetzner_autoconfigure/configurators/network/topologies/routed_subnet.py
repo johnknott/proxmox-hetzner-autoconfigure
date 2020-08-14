@@ -69,6 +69,9 @@ class Config(cfg.Configurator):
 
         net_priv = IPv4Network(private_subnet)
         net_pub = IPv4Network(public_subnet)
+        util.shared_globals["private_subnet"] = private_subnet
+        util.shared_globals["public_subnet"] = public_subnet
+        util.shared_globals["hetzner_ip"] = hetzner_ip
 
         return Data(
             hetzner_ip=hetzner_ip,

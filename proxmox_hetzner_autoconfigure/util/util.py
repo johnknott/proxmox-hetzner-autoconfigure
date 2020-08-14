@@ -2,7 +2,6 @@
 import os
 import re
 import platform
-from pathlib import Path
 from ipaddress import IPv4Network, IPv4Address
 from dialog import Dialog
 from jinja2 import Environment, FileSystemLoader
@@ -58,15 +57,21 @@ def wrap_as_heredoc(content, filename):
 
 def build_script(configurators):
     """
-    Loops over configurators, calling to_script on them and then renders the script sections
+    Loops over configurators, calling gather_input on them and then renders the script sections
     in a template.
     """
 
-    def build_params(configurator):
+    def gather_input(configurator):
         cfg = configurator.Config()
-        return {"name": cfg.description, "content": cfg.to_script()}
+        dialog.set_background_title(cfg.description)
+        return {"config": cfg, "input": cfg.gather_input()}
 
-    sections = map(build_params, configurators)
+    def generate_script(input_data):
+        cfg = input_data["config"]
+        return {"name": cfg.description, "content": cfg.generate_script(input_data["input"])}
+
+    sections = map(generate_script, map(gather_input, configurators))
+
     return render_template(__file__, "install", {"sections": sections})
 
 

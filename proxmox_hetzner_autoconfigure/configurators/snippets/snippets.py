@@ -1,6 +1,5 @@
 """Snippets Configurator"""
 
-import ipdb
 import glob
 import os
 import toml
@@ -45,15 +44,24 @@ class Config(cfg.Configurator):
         if code != "ok":
             return None
 
-        def load_snippet(snippet):
-            snippet["content"] = util.render_template(__file__, snippet["filename"], [])
-            util.shared_globals[snippet["short_description"]] = True
+        def save_in_globals(snippet):
+            util.shared_globals[snippet["short_description"].lower()] = True
             return snippet
 
-        chosen_snippets = [load_snippet(s) for s in snippets if s["short_description"] in chosen]
+        chosen_snippets = [save_in_globals(s) for s in snippets if s["short_description"] in chosen]
 
         return Data(snippets=chosen_snippets)
 
     def generate_script(self, data: Data) -> str:
         """transforms a Data into a shell script segment"""
-        return util.render_template(__file__, "template", data)
+
+        def render_snippet(snippet):
+
+            snippet["content"] = util.render_template(
+                __file__, snippet["filename"], {"shared_globals": util.shared_globals}
+            )
+            return snippet
+
+        return util.render_template(
+            __file__, "template", Data(snippets=[render_snippet(s) for s in data.snippets])
+        )

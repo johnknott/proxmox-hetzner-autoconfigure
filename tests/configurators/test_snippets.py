@@ -17,22 +17,3 @@ def test_gather_input_correct():
     config = snippets.Config()
     snippets.util.dialog = dialog
     assert config.gather_input() == snippets.Data(snippets=[])
-
-
-def test_generate_script():
-
-    print("asdasdasd")
-    config = snippets.Config()
-    data = snippets.Data(
-        snippets=[
-            {
-                "filename": "filename",
-                "content": "content",
-                "short_description": "test_short_desc",
-                "description": "test_desc",
-            }
-        ]
-    )
-
-    script = config.generate_script(data=data)
-    assert "Configuring Snippets: filename" in script
