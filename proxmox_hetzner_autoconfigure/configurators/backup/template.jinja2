@@ -1,0 +1,50 @@
+cat << 'EOF' > /usr/bin/proxmox-host-backup
+#!/bin/bash
+# Set Bash strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+if [ "$#" -ne 3 ]; then
+    echo "Usage: $0 destination_path keep_count prefix"
+    exit 1
+fi
+
+dest=$1
+keep=$2
+prefix=$3
+
+filename=${dest}/proxmox-backup-${prefix}-$(date +%s).tar.gz
+tar -czvf $filename /etc /var/lib/pve-cluster /root
+gpg --symmetric --batch --yes --passphrase-file /etc/proxmox-backup-password --cipher-algo AES256 $filename
+rm $filename
+
+if ((keep > 0)); then
+    ((rowcount=keep+1))
+    ls ${dest}/proxmox-backup-${prefix}*.tar.gz.gpg -tp | grep -v '/$' | tail -n +"$rowcount" | xargs -I {} rm -- {}
+fi
+EOF
+
+read -s -p "Please enter a password to encrypt your backups with - and make a note of it:" BACKUP_PASSWORD
+echo $BACKUP_PASSWORD > /etc/proxmox-backup-password
+echo
+chmod +x /usr/bin/proxmox-host-backup
+
+{%- if schedule_backups -%}.
+cat << EOF > /etc/cron.hourly/proxmox-host-backup
+#!/bin/sh
+/usr/bin/proxmox-host-backup {{ destination }} 24 hourly
+EOF
+chmod +x /etc/cron.hourly/proxmox-host-backup
+
+cat << EOF > /etc/cron.daily/proxmox-host-backup
+#!/bin/sh
+/usr/bin/proxmox-host-backup {{ destination }} 7 daily
+EOF
+chmod +x /etc/cron.daily/proxmox-host-backup
+
+cat << EOF > /etc/cron.weekly/proxmox-host-backup
+#!/bin/sh
+/usr/bin/proxmox-host-backup {{ destination }} 26 weekly
+EOF
+chmod +x /etc/cron.weekly/proxmox-host-backup
+{% endif %}
