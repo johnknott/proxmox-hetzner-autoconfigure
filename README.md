@@ -26,8 +26,9 @@ Things this project will help configure and whether they are implemented yet:
 - [x] TLS with LetsEncrypt / ACME
 - [x] Mounting a Hetzner Storage Box
 - [x] Setting up LMV-Thin
-- [ ] DNS and DHCP (DNSMasq)
-- [ ] Wireguard
+- [x] DNS and DHCP (DNSMasq)
+- [x] Wireguard
+- [x] Scheduled Backups
 
 Hopefully this script saves some people some time. I'll try and update it as I learn new and better ways to do things with Proxmox.
 

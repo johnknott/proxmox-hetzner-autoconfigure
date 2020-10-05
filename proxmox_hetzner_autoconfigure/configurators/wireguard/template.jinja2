@@ -22,7 +22,7 @@ if [ ! -f seqno.txt ]; then
 fi
 
 rm -f /etc/wireguard/wghub.conf
-ln -s wghub.conf /etc/wireguard/wghub.conf
+ln -s /root/wireguard/wghub.conf /etc/wireguard/wghub.conf
 
 systemctl enable wg-quick@wghub.service
 systemctl daemon-reload
