@@ -51,4 +51,10 @@ def run():
         text_file.write(script)
         text_file.close()
         os.chmod(bootstrap_file, 0o744)
-        print(f"Completed! {bootstrap_file} has been written to the working directory.")
+        os.system("clear")
+        next_steps = util.render_template(
+            __file__,
+            "next-steps",
+            {"bootstrap_file": bootstrap_file, "hetzner_ip": util.shared_globals.get("hetzner_ip")},
+        )
+        print(next_steps)

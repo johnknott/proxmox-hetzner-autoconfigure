@@ -1,0 +1,14 @@
+Completed! 
+
+{{ bootstrap_file }} has been written to the working directory.
+Inspect it and make sure it all makes sense. It is quite well commented.
+
+Next:
+1) Copy this file to your Proxmox host:
+e.g
+$ scp {{ bootstrap_file }} root@{{ hetzner_ip or '<host>' }}:
+
+2) SSH into your Proxmox server and execute it:
+e.g.
+$ ssh root@{{ hetzner_ip or '<host>' }}
+root@{{ hetzner_ip or '<host>' }} $ ./bootstrap
