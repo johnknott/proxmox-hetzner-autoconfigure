@@ -38,6 +38,8 @@ class Config(cfg.Configurator):
         if domain is None:
             return None
 
+        util.shared_globals["fqdn"] = domain
+
         return Data(email, domain)
 
     def generate_script(self, data: Data) -> str:
