@@ -27,11 +27,12 @@ EOF
 read -s -p "Please enter a password to encrypt your backups with - and make a note of it:" BACKUP_PASSWORD
 echo $BACKUP_PASSWORD > /etc/proxmox-backup-password
 chmod 400 /etc/proxmox-backup-password
+# Decrypt backups with e.g: gpg --no-symkey-cache -o output.tar.gz -d proxmox-backup-hourly-1601885821.tar.gz.gpg
 
 echo
 chmod +x /usr/bin/proxmox-host-backup
 
-{%- if schedule_backups -%}
+{%- if schedule_backups -%}.
 cat << EOF > /etc/cron.hourly/proxmox-host-backup
 #!/bin/sh
 /usr/bin/proxmox-host-backup {{ destination }} 24 hourly
@@ -50,3 +51,7 @@ cat << EOF > /etc/cron.weekly/proxmox-host-backup
 EOF
 chmod +x /etc/cron.weekly/proxmox-host-backup
 {% endif %}
+
+summary+=('Backup: Created /etc/proxmox-host-backup script')
+summary+=('Backup: Wrote backup password to /etc/proxmox-backup-password')
+summary+=('Backup: Scheduled hourly, daily, and weekly backups using Cron to be stored at {{ destination }}'')
