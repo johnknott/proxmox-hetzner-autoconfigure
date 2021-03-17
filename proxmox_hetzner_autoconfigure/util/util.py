@@ -71,8 +71,8 @@ def build_script(configurators):
         return {"name": cfg.description, "content": cfg.generate_script(input_data["input"])}
 
     sections = map(generate_script, map(gather_input, configurators))
-
-    return render_template(__file__, "install", {"sections": sections})
+    
+    return render_template(__file__, "install", {"sections": sections, "shared_globals": shared_globals})
 
 
 def input_regex(message, regex, regex_fail, **kwargs):

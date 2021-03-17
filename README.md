@@ -13,6 +13,9 @@
 
 This is a command line `dialog` based tool to help configure a freshly installed Proxmox host node on a Hetzner dedicated server.
 
+If you haven't yet installed Proxmox on your Hetzner server, start here: [Installing Proxmox on Hetzner](INSTALLING-PROXMOX.md), then use this tool
+ to help configure the rest.
+ 
 The application will ask you a series of questions to ascertain how you'd like your server to be setup, and output a neat, well documented `boostrap.sh` script you can execute on your Proxmox host to configure things like Networking, Storage, and TLS.
 
 Things this project will help configure and whether they are implemented yet:
@@ -94,7 +97,7 @@ $ poetry install
 - From within the project directory, run the application using `poetry`.
 
 ```sh
-$ poetry run main
+$ poetry run proxmox-hetzner-autoconfigure 
 ```
 
 - From within the project directory, run the test-suite using `poetry`.

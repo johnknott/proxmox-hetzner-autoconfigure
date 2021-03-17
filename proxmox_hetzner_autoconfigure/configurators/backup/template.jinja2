@@ -32,7 +32,7 @@ chmod 400 /etc/proxmox-backup-password
 echo
 chmod +x /usr/bin/proxmox-host-backup
 
-{%- if schedule_backups -%}
+{% if schedule_backups %}
 cat << EOF > /etc/cron.hourly/proxmox-host-backup
 #!/bin/sh
 /usr/bin/proxmox-host-backup {{ destination }} 24 hourly
