@@ -3,7 +3,7 @@ authors = ["John Knott <john.knott@gmail.com>"]
 description = "Helps to configure Proxmox on Hetzner. Takes over where Hetzner installimage left off"
 name = "proxmox-hetzner-autoconfigure"
 readme = "README.md"
-version = "0.1.7"
+version = "0.2.0"
 
 [tool.poetry.dependencies]
 ipdb = "^0.13.3"
